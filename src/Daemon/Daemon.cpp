@@ -385,6 +385,9 @@ command_line::add_arg(desc_cmd_sett, arg_print_genesis_tx);
 
       std::string data_dir = command_line::get_arg(vm, command_line::arg_data_dir);
       std::string config = command_line::get_arg(vm, arg_config_file);
+      if(config.empty()){
+        config = "configs/USPrivate.conf";
+      }
 
       data_dir_path = data_dir;
       boost::filesystem::path config_path(config);
