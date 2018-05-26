@@ -1443,6 +1443,9 @@ int main(int argc, char* argv[]) {
     po::store(parser.run(), vm);
     std::string data_dir = command_line::get_arg(vm, command_line::arg_data_dir);
     std::string config = command_line::get_arg(vm, arg_config_file);
+    if(config.empty()){
+      config = "configs/USPrivate.conf";
+    }
     boost::filesystem::path data_dir_path(data_dir);
     boost::filesystem::path config_path(config);
     if (!config_path.has_parent_path())
