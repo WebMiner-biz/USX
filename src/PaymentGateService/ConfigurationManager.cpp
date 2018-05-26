@@ -108,6 +108,29 @@ po::variables_map confOptions;
     netNodeConfig.setTestnet(confOptions["testnet"].as<bool>());
     startInprocess = confOptions["local"].as<bool>();
   }
+  else{
+    std::ifstream confStream("configs/USPrivate.conf", std::ifstream::in);
+    if (!confStream.good()) {
+      throw ConfigurationError("Cannot open configuration file");
+    }
+
+
+    po::store(po::parse_config_file(confStream, confOptionsDesc, true), confOptions);
+    po::notify(confOptions);
+
+    std::string default_data_dir = Tools::getDefaultDataDirectory();
+    if (!coinBaseConfig.CRYPTONOTE_NAME.empty()) {
+      boost::replace_all(default_data_dir, CryptoNote::CRYPTONOTE_NAME, coinBaseConfig.CRYPTONOTE_NAME);
+    }
+    netNodeConfig.setConfigFolder(default_data_dir);
+    gateConfiguration.init(confOptions);
+    netNodeConfig.init(confOptions);
+    remoteNodeConfig.init(confOptions);
+    coinBaseConfig.init(confOptions);
+
+    netNodeConfig.setTestnet(confOptions["testnet"].as<bool>());
+    startInprocess = confOptions["local"].as<bool>();
+  }
 
   //command line options should override options from config file
   gateConfiguration.init(cmdOptions);
